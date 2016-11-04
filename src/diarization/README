@@ -1,0 +1,9 @@
+To install the diarization toolkit:
+
+cd cmake 
+cmake .
+make
+make install
+
+By default the binary is installed in /usr/local/bin/. If you want to change, run
+cmake -DCMAKE_INSTALL_PREFIX=[your prefix] .

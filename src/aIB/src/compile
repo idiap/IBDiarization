@@ -1,0 +1,8 @@
+#!/bin/bash
+g++ -o runaib \
+    *.cpp \
+    -fopenmp \
+    ../../utils/src/*.cpp \
+    -I ../include/ \
+    -I ../../utils/include/ 
+
