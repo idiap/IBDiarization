@@ -36,7 +36,6 @@
 #define N_LOOPS_K_MEANS 15
 #define LAST 0
 #define CURR 1
-#define P 2	//variable to decide the initialization
 #define MIN_FLOAT -3.40282346638528860e+38
 #define FULL_HEADER 1
 #define ONLY_SEGMENTATION 0
