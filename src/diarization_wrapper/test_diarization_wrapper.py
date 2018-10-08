@@ -53,7 +53,8 @@ if __name__ == '__main__':
     video_file = 'interview.mkv'
     is_ok = True
     is_ok &= test_binaries()
-    is_ok &= test_end_to_end(video_file)
+    #  disable video because we need a free video
+    #  is_ok &= test_end_to_end(video_file)
     if is_ok:
         print('diarization_wrapper -> OK')
     else:
