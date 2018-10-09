@@ -1,0 +1,9 @@
+package:
+  name: pydiarization
+  version: "0.1"
+
+source:
+  path: ../../pydiarization
+requirements:
+  run:
+    - python
