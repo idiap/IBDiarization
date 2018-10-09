@@ -7,7 +7,7 @@ import tempfile
 import os
 import re
 import subprocess
-import config
+import pydiarization.config as config
 
 def video_to_rttm_string(video_path):
     """ High-level function that return the rttm as string from a video

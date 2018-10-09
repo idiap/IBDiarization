@@ -2,7 +2,9 @@
 
 Author: Droz William <william.droz@idiap.ch>
 """
-from os import environ
+from os import environ, path
+
+__module_folder=path.dirname(path.abspath(__file__))
 
 # default sampling for creating wav file (in Hz)
 p_default_sampling = 16000
@@ -20,7 +22,7 @@ p_binary_compute_mfcc_feats = 'compute-mfcc-feats'
 p_binary_copy_feats_to_htk = 'copy-feats-to-htk'
 
 # where to find the kaldi config file to compute mfcc
-p_kaldi_mfcc_conf_file = 'kaldi_mfcc.conf'
+p_kaldi_mfcc_conf_file = path.join(__module_folder, 'kaldi_mfcc.conf')
 
 # tmp folder for diarization toolkit (must already exist)
 p_tmp_folder = 'result.dir'

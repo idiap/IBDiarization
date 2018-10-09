@@ -5,8 +5,8 @@ Author: Droz William <william.droz@idiap.ch>
 """
 import os
 import subprocess
-from diarization_wrapper import video_to_rttm_string
-import config
+from pydiarization.diarization_wrapper import video_to_rttm_string
+import pydiarization.config as config
 
 def _run_cmd(command):
     """ run command using subprocess
