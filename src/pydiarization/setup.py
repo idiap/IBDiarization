@@ -5,8 +5,10 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='pydiarization',
-      version='0.1',
-      packages=find_packages(),
+      version='0.2',
+      packages=find_packages(where='../pydiarization'),
+      package_dir={'pydiarization': '.'},
+      package_data={'pydiarization': ['kaldi_mfcc.conf']},
       author="William Droz",
       author_email="william.droz@idiap.ch",
       description="Diarization toolkit wrapper",
