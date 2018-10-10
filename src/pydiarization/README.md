@@ -27,6 +27,9 @@ Before using the pywrapper, you have to create a folder that will contains the r
 mkdir result.dir
 ```
 
+## Test the installation
+
+To check if all binaries works and are recognized by pydiarization, you can run the tests by typing: ```python3 -m pydiarization.test_diarization_wrapper```
 
 ### from code
 
