@@ -1,9 +1,11 @@
 package:
   name: pydiarization
-  version: "0.1"
+  version: "0.2"
 
-source:
-  path: ../../pydiarization
 requirements:
+  build:
+          - python
+          - pip 
+          - setuptools
   run:
-    - python
+          - python
