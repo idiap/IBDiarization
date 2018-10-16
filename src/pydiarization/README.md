@@ -80,4 +80,26 @@ def rttm_from_wav(wav_path, rttm_path):
 
 ### from CLI
 
-TODO
+The usage is the follow:
+<pre>
+$ python3 -m pydiarization.run --help
+usage: run.py [-h] [--video VIDEO] [--wav WAV] [--output OUTPUT]
+
+Diarization Toolkit Wrapper CLI
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --video VIDEO    take a video file or URL as input
+  --wav WAV        take a wav file as input
+  --output OUTPUT  specify to write as .rttm file
+</pre>
+
+#### some examples
+
+Ask to get the .rttm content from a url:
+`python3 -m pydiarization.run --video http://data.cstr.inf.ed.ac.uk/summa/data/test.mp4`
+<pre>SPEAKER tmp86hrhwsd 1 0.01 292.17 <NA> <NA> tmp86hrhwsd_spkr_9 <NA>
+SPEAKER tmp86hrhwsd 1 292.18 2.98 <NA> <NA> tmp86hrhwsd_spkr_2 <NA></pre>
+
+Ask to write to .rttm file instead:
+`python3 -m pydiarization.run --video http://data.cstr.inf.ed.ac.uk/summa/data/test.mp4 --output toto.rttm`
