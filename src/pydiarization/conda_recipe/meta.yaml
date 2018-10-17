@@ -1,0 +1,11 @@
+package:
+  name: pydiarization
+  version: "0.3"
+
+requirements:
+  build:
+          - python
+          - pip 
+          - setuptools
+  run:
+          - python
