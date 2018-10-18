@@ -97,3 +97,6 @@ $> src/diarization/cmake/diarizeme \
     --beta 10 \
     --nthread 1 
 ```
+#  Pydiarization - a python wrapper
+
+The [pydiarization](https://github.com/idiap/IBDiarization/tree/master/src/pydiarization) subproject provides high-level API around the Diarization toolkit.
