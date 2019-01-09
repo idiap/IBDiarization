@@ -5,7 +5,7 @@ Author: Droz William <william.droz@idiap.ch>
 """
 import os
 import subprocess
-from pydiarization.diarization_wrapper import video_to_rttm_string
+from pydiarization.diarization_wrapper import video_to_rttm_string, wav_to_rttm_string
 import pydiarization.config as config
 
 def _run_cmd(command):
@@ -36,6 +36,11 @@ def test_binary(binary, parameters):
     command = '{} {}'.format(binary, parameters)
     return _run_cmd(command)
     
+def test_end_to_end_audio_with_scp_file(audio_file, external_scp, reference_rttm):
+    """ test"""
+    res = wav_to_rttm_string(audio_file, external_scp)
+    print(res)
+    return True
 
 def test_end_to_end(video_file):
     """ test the Diarization Toolkit with the video_file
@@ -50,11 +55,12 @@ def test_end_to_end(video_file):
         return False
 
 if __name__ == '__main__':
-    video_file = 'interview.mkv'
+    audio_file = 'AMI_20041210-1052_seg.wav'
+    external_scp = 'AMI_20041210-1052.scp'
+    reference_rttm = 'AMI_20041210-1052.rttm'
     is_ok = True
     is_ok &= test_binaries()
-    #  disable video because we need a free video
-    #  is_ok &= test_end_to_end(video_file)
+    is_ok &= test_end_to_end_audio_with_scp_file(audio_file, external_scp, reference_rttm)
     if is_ok:
         print('diarization_wrapper -> OK')
     else:

@@ -9,28 +9,30 @@ import re
 import subprocess
 import pydiarization.config as config
 
-def video_to_rttm_string(video_path):
+def video_to_rttm_string(video_path, external_scp=None):
     """ High-level function that return the rttm as string from a video
     Arguments:
     video_path -- where the video is
+    external_scp -- external scp file used to create sequences
 
     Return: the rttm content as string
     """
     rttm_path = tempfile.NamedTemporaryFile(suffix='.rttm', dir=config.p_tmp_folder).name
-    rttm_from_video(video_path, rttm_path)
+    rttm_from_video(video_path, rttm_path, external_scp)
     rttm_str = rttm_to_string(rttm_path)
     os.remove(rttm_path)
     return rttm_str
 
-def wav_to_rttm_string(wav_path):
+def wav_to_rttm_string(wav_path, external_scp=None):
     """ High-level function that return the rttm as string from a wav
     Arguments:
     wav_path -- where the wav is
+    external_scp -- external scp file used to create sequences
 
     Return: the rttm content as string
     """
     rttm_path = tempfile.NamedTemporaryFile(suffix='.rttm', dir=config.p_tmp_folder).name
-    rttm_from_wav(wav_path, rttm_path)
+    rttm_from_wav(wav_path, rttm_path, external_scp)
     rttm_str = rttm_to_string(rttm_path)
     os.remove(rttm_path)
     return rttm_str
@@ -45,22 +47,24 @@ def rttm_to_string(rttm_path):
     with open(rttm_path, 'r') as f:
         return f.read()
 
-def rttm_from_video(video_path, rttm_path):
+def rttm_from_video(video_path, rttm_path, external_scp=None):
     """ create a .rttm file from a video
     Arguments:
     video_path -- path to the video
     rttm_path -- path where the .rrtm file will be saved
+    external_scp -- external scp file used to create sequences
     """
     wav_path = tempfile.NamedTemporaryFile(suffix='.wav', dir=config.p_tmp_folder).name
     _video_to_wav(video_path, wav_path)
-    rttm_from_wav(wav_path, rttm_path)
+    rttm_from_wav(wav_path, rttm_path, external_scp)
     os.remove(wav_path)
 
-def rttm_from_wav(wav_path, rttm_path):
+def rttm_from_wav(wav_path, rttm_path, external_scp=None):
     """ create a .rttm file from a wav
     Arguments:
     wav_path -- path to the wav file
     rttm_path -- path where the .rrtm file will be saved
+    external_scp -- external scp file used to create sequences
     """
     fea_path = tempfile.NamedTemporaryFile(suffix='.fea', dir=config.p_tmp_folder).name
     kaldi_wav_scp_path = tempfile.NamedTemporaryFile(suffix='.scp', dir=config.p_tmp_folder).name
@@ -75,7 +79,10 @@ def rttm_from_wav(wav_path, rttm_path):
     _create_kaldi_ark(kaldi_wav_scp_path, ark_path)
     _create_kaldi_ark_scp_file(ark_path, kaldi_ark_scp_path, fileid)
     _convert_kaldi_mfcc_ark_to_htk_fea(config.p_tmp_folder, ark_path)
-    _create_scp_file_without_htk(fea_path, scp_path, fileid)
+    if external_scp is not None:
+        _create_scp_file_without_htk_from_external_scp(fea_path, scp_path, fileid, external_scp)
+    else:
+        _create_scp_file_without_htk(fea_path, scp_path, fileid)
     _create_rttm_file(fea_path, scp_path, rttm_path, tmp_rttm_file)
 
     os.remove(fea_path)
@@ -83,6 +90,30 @@ def rttm_from_wav(wav_path, rttm_path):
     os.remove(kaldi_wav_scp_path)
     os.remove(kaldi_ark_scp_path)
     os.remove(ark_path)
+
+def _get_sequences(external_scp):
+    """ retreive all the sequences from a scp file
+    Arguments:
+    external_scp -- external scp file used to create sequences
+    """
+    with open(external_scp, 'r') as f:
+        return re.findall(r'\.fea\[(\d+),\s*(\d+)\]', f.read())
+
+def _create_scp_file_without_htk_from_external_scp(fea_path, scp_path, fileid, external_scp):
+    """ create a scp file based on a existing one (external)
+    Arguments:
+    fea_path -- path to the fea file
+    scp_path -- path where the scp file will be saved
+    fileid -- identifiant of file rttm
+    external_scp -- external scp file used to create sequences
+    """
+    fea_nb_bytes = _get_nb_bytes_from_file(fea_path)
+    nb_ceps = _get_num_ceps()
+    nb_frames = int(((fea_nb_bytes - 14) / 4) / nb_ceps)
+    with open(scp_path, 'w') as f:
+        for seq in _get_sequences(external_scp):
+            f.write('{}_{}_{}={}[{},{}]\n'.format(fileid, *seq, fea_path, *seq))
+
 
 def _create_kaldi_wav_scp_file(wav_path, scp_path, fileid):
     """ create a scp file for getting the .wav for kaldi

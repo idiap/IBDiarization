@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(name='pydiarization',
-      version='0.3',
+      version='0.4',
       packages=find_packages(where='../pydiarization'),
       package_dir={'pydiarization': '.'},
       package_data={'pydiarization': ['kaldi_mfcc.conf']},
